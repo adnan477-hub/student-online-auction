@@ -14,16 +14,180 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      auctions: {
+        Row: {
+          bid_count: number
+          category: string
+          condition: string
+          created_at: string
+          current_price: number
+          description: string
+          end_time: string
+          id: string
+          image_url: string | null
+          leader_id: string | null
+          min_increment: number
+          seller_id: string
+          seller_name: string
+          starting_price: number
+          status: Database["public"]["Enums"]["auction_status"]
+          title: string
+        }
+        Insert: {
+          bid_count?: number
+          category?: string
+          condition?: string
+          created_at?: string
+          current_price?: number
+          description?: string
+          end_time: string
+          id?: string
+          image_url?: string | null
+          leader_id?: string | null
+          min_increment?: number
+          seller_id: string
+          seller_name?: string
+          starting_price: number
+          status?: Database["public"]["Enums"]["auction_status"]
+          title: string
+        }
+        Update: {
+          bid_count?: number
+          category?: string
+          condition?: string
+          created_at?: string
+          current_price?: number
+          description?: string
+          end_time?: string
+          id?: string
+          image_url?: string | null
+          leader_id?: string | null
+          min_increment?: number
+          seller_id?: string
+          seller_name?: string
+          starting_price?: number
+          status?: Database["public"]["Enums"]["auction_status"]
+          title?: string
+        }
+        Relationships: []
+      }
+      bids: {
+        Row: {
+          amount: number
+          auction_id: string
+          bidder_id: string
+          bidder_name: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          amount: number
+          auction_id: string
+          bidder_id: string
+          bidder_name?: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          amount?: number
+          auction_id?: string
+          bidder_id?: string
+          bidder_name?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bids_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "auctions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          college: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          student_id: string
+        }
+        Insert: {
+          college?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id: string
+          phone?: string
+          student_id?: string
+        }
+        Update: {
+          college?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string
+          student_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_stats: { Args: never; Returns: Json }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      place_bid: {
+        Args: { _amount: number; _auction_id: string }
+        Returns: {
+          amount: number
+          auction_id: string
+          bidder_id: string
+          bidder_name: string
+          created_at: string
+          id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bids"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "student"
+      auction_status: "pending" | "active" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +314,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "student"],
+      auction_status: ["pending", "active", "rejected"],
+    },
   },
 } as const
