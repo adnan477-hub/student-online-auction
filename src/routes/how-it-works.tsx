@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { STEPS } from "./index";
+import { STEPS } from "@/lib/steps";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
