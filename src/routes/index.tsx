@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, BadgeCheck, Gavel, ListPlus, Trophy, UserPlus } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { STEPS } from "@/lib/steps";
 import { Button } from "@/components/ui/button";
 import { AuctionCard } from "@/components/AuctionCard";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,13 +20,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-export const STEPS = [
-  { icon: UserPlus, title: "Register", text: "Sign up with your student ID and college." },
-  { icon: ListPlus, title: "List Your Item", text: "Add photos, a starting price and an end time." },
-  { icon: BadgeCheck, title: "Admin Approval", text: "An admin checks every listing before it goes live." },
-  { icon: Gavel, title: "Students Bid", text: "Bids update live for everyone watching." },
-  { icon: Trophy, title: "Highest Bidder Wins", text: "When the clock hits zero, the top bid takes it." },
-];
 
 function Home() {
   const now = useNow();
