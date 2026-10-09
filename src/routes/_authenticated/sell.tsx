@@ -44,7 +44,7 @@ function Sell() {
     if (!user) return;
     const fd = new FormData(e.currentTarget);
     const r = schema.safeParse(Object.fromEntries(fd));
-    if (!r.success) return void toast.error(r.error.issues[0].message);
+    if (!r.success) return void toast.error(r.error.issues[0]?.message ?? "Check the form");
     const end = new Date(r.data.end);
     if (end.getTime() < Date.now() + 10 * 60_000) return void toast.error("End time must be at least 10 minutes from now");
     setBusy(true);

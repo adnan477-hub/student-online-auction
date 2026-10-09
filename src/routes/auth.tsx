@@ -42,12 +42,12 @@ function AuthPage() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const f = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    const f = Object.fromEntries(new FormData(e.currentTarget)) as { email: string; password: string; [k: string]: string };
     setBusy(true);
     try {
       if (mode === "register") {
         const r = registerSchema.safeParse(f);
-        if (!r.success) return void toast.error(r.error.issues[0].message);
+        if (!r.success) return void toast.error(r.error.issues[0]?.message ?? "Check the form");
         const { password, confirm: _c, email, ...meta } = r.data;
         const { error } = await supabase.auth.signUp({
           email,
