@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -9,6 +9,7 @@ type Profile = {
   student_id: string;
   college: string;
   phone: string;
+  status: string;
 };
 
 type AuthState = {
@@ -18,51 +19,39 @@ type AuthState = {
   loading: boolean;
 };
 
-const AuthContext = createContext<AuthState>({
+const AuthContext = createContext<AuthState & { refresh: () => void }>({
   user: null,
   profile: null,
   isAdmin: false,
   loading: true,
+  refresh: () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({
-    user: null,
-    profile: null,
-    isAdmin: false,
-    loading: true,
-  });
+  const [state, setState] = useState<AuthState>({ user: null, profile: null, isAdmin: false, loading: true });
+
+  const load = useCallback(async (user: User | null) => {
+    if (!user) return setState({ user: null, profile: null, isAdmin: false, loading: false });
+    const [{ data: profile }, { data: roles }] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", user.id),
+    ]);
+    setState({ user, profile: profile as Profile | null, isAdmin: !!roles?.some((r) => r.role === "admin"), loading: false });
+  }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    const load = async (user: User | null) => {
-      if (!user) {
-        if (!cancelled) setState({ user: null, profile: null, isAdmin: false, loading: false });
-        return;
-      }
-      const [{ data: profile }, { data: roles }] = await Promise.all([
-        supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
-        supabase.from("user_roles").select("role").eq("user_id", user.id),
-      ]);
-      if (!cancelled)
-        setState({
-          user,
-          profile: profile as Profile | null,
-          isAdmin: !!roles?.some((r) => r.role === "admin"),
-          loading: false,
-        });
-    };
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       setTimeout(() => load(session?.user ?? null), 0);
     });
     supabase.auth.getSession().then(({ data }) => load(data.session?.user ?? null));
-    return () => {
-      cancelled = true;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+    return () => sub.subscription.unsubscribe();
+  }, [load]);
 
-  return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
+  const refresh = useCallback(() => {
+    supabase.auth.getUser().then(({ data }) => load(data.user));
+  }, [load]);
+
+  return <AuthContext.Provider value={{ ...state, refresh }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);
