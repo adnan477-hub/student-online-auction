@@ -20,6 +20,12 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedSellRouteImport } from './routes/_authenticated/sell'
 import { Route as AuctionsIndexRouteImport } from './routes/auctions.index'
 import { Route as AuctionsIdRouteImport } from './routes/auctions.$id'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardBidsRouteImport } from './routes/_authenticated/dashboard.bids'
+import { Route as AuthenticatedDashboardListingsRouteImport } from './routes/_authenticated/dashboard.listings'
+import { Route as AuthenticatedDashboardNotificationsRouteImport } from './routes/_authenticated/dashboard.notifications'
+import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
+import { Route as AuthenticatedDashboardWatchlistRouteImport } from './routes/_authenticated/dashboard.watchlist'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -75,6 +81,42 @@ const AuctionsIdRoute = AuctionsIdRouteImport.update({
   path: '/auctions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardBidsRoute =
+  AuthenticatedDashboardBidsRouteImport.update({
+    id: '/bids',
+    path: '/bids',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardListingsRoute =
+  AuthenticatedDashboardListingsRouteImport.update({
+    id: '/listings',
+    path: '/listings',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardNotificationsRoute =
+  AuthenticatedDashboardNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardProfileRoute =
+  AuthenticatedDashboardProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardWatchlistRoute =
+  AuthenticatedDashboardWatchlistRouteImport.update({
+    id: '/watchlist',
+    path: '/watchlist',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -83,10 +125,16 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/sell': typeof AuthenticatedSellRoute
   '/auctions/$id': typeof AuctionsIdRoute
   '/auctions/': typeof AuctionsIndexRoute
+  '/dashboard/bids': typeof AuthenticatedDashboardBidsRoute
+  '/dashboard/listings': typeof AuthenticatedDashboardListingsRoute
+  '/dashboard/notifications': typeof AuthenticatedDashboardNotificationsRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/watchlist': typeof AuthenticatedDashboardWatchlistRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -95,10 +143,15 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
   '/sell': typeof AuthenticatedSellRoute
   '/auctions/$id': typeof AuctionsIdRoute
   '/auctions': typeof AuctionsIndexRoute
+  '/dashboard/bids': typeof AuthenticatedDashboardBidsRoute
+  '/dashboard/listings': typeof AuthenticatedDashboardListingsRoute
+  '/dashboard/notifications': typeof AuthenticatedDashboardNotificationsRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/watchlist': typeof AuthenticatedDashboardWatchlistRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,10 +162,16 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/sell': typeof AuthenticatedSellRoute
   '/auctions/$id': typeof AuctionsIdRoute
   '/auctions/': typeof AuctionsIndexRoute
+  '/_authenticated/dashboard/bids': typeof AuthenticatedDashboardBidsRoute
+  '/_authenticated/dashboard/listings': typeof AuthenticatedDashboardListingsRoute
+  '/_authenticated/dashboard/notifications': typeof AuthenticatedDashboardNotificationsRoute
+  '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/watchlist': typeof AuthenticatedDashboardWatchlistRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -127,6 +186,12 @@ export interface FileRouteTypes {
     | '/sell'
     | '/auctions/$id'
     | '/auctions/'
+    | '/dashboard/bids'
+    | '/dashboard/listings'
+    | '/dashboard/notifications'
+    | '/dashboard/profile'
+    | '/dashboard/watchlist'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -135,10 +200,15 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/reset-password'
     | '/admin'
-    | '/dashboard'
     | '/sell'
     | '/auctions/$id'
     | '/auctions'
+    | '/dashboard/bids'
+    | '/dashboard/listings'
+    | '/dashboard/notifications'
+    | '/dashboard/profile'
+    | '/dashboard/watchlist'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
@@ -152,6 +222,12 @@ export interface FileRouteTypes {
     | '/_authenticated/sell'
     | '/auctions/$id'
     | '/auctions/'
+    | '/_authenticated/dashboard/bids'
+    | '/_authenticated/dashboard/listings'
+    | '/_authenticated/dashboard/notifications'
+    | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/watchlist'
+    | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,18 +320,85 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuctionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/bids': {
+      id: '/_authenticated/dashboard/bids'
+      path: '/bids'
+      fullPath: '/dashboard/bids'
+      preLoaderRoute: typeof AuthenticatedDashboardBidsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/listings': {
+      id: '/_authenticated/dashboard/listings'
+      path: '/listings'
+      fullPath: '/dashboard/listings'
+      preLoaderRoute: typeof AuthenticatedDashboardListingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/notifications': {
+      id: '/_authenticated/dashboard/notifications'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof AuthenticatedDashboardNotificationsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/profile': {
+      id: '/_authenticated/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof AuthenticatedDashboardProfileRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/watchlist': {
+      id: '/_authenticated/dashboard/watchlist'
+      path: '/watchlist'
+      fullPath: '/dashboard/watchlist'
+      preLoaderRoute: typeof AuthenticatedDashboardWatchlistRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
+interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardBidsRoute: typeof AuthenticatedDashboardBidsRoute
+  AuthenticatedDashboardListingsRoute: typeof AuthenticatedDashboardListingsRoute
+  AuthenticatedDashboardNotificationsRoute: typeof AuthenticatedDashboardNotificationsRoute
+  AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardWatchlistRoute: typeof AuthenticatedDashboardWatchlistRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+}
+
+const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
+  {
+    AuthenticatedDashboardBidsRoute: AuthenticatedDashboardBidsRoute,
+    AuthenticatedDashboardListingsRoute: AuthenticatedDashboardListingsRoute,
+    AuthenticatedDashboardNotificationsRoute:
+      AuthenticatedDashboardNotificationsRoute,
+    AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+    AuthenticatedDashboardWatchlistRoute: AuthenticatedDashboardWatchlistRoute,
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  }
+
+const AuthenticatedDashboardRouteWithChildren =
+  AuthenticatedDashboardRoute._addFileChildren(
+    AuthenticatedDashboardRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
   AuthenticatedSellRoute: typeof AuthenticatedSellRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
   AuthenticatedSellRoute: AuthenticatedSellRoute,
 }
 
