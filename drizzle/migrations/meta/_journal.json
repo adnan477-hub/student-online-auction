@@ -8,6 +8,13 @@
       "when": 1791391929530,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791612475162,
+      "tag": "0001_dashboards_watchlist_notifications_reports_audit",
+      "breakpoints": true
     }
   ]
 }

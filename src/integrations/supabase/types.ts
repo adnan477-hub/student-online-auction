@@ -71,6 +71,33 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: string
+          id: string
+          target: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: string
+          id?: string
+          target?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: string
+          id?: string
+          target?: string
+        }
+        Relationships: []
+      }
       bids: {
         Row: {
           amount: number
@@ -106,6 +133,36 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          auction_id: string | null
+          body: string
+          created_at: string
+          id: string
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          auction_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          auction_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           college: string
@@ -114,6 +171,7 @@ export type Database = {
           full_name: string
           id: string
           phone: string
+          status: string
           student_id: string
         }
         Insert: {
@@ -123,6 +181,7 @@ export type Database = {
           full_name?: string
           id: string
           phone?: string
+          status?: string
           student_id?: string
         }
         Update: {
@@ -132,9 +191,45 @@ export type Database = {
           full_name?: string
           id?: string
           phone?: string
+          status?: string
           student_id?: string
         }
         Relationships: []
+      }
+      reports: {
+        Row: {
+          auction_id: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          status: string
+        }
+        Insert: {
+          auction_id: string
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          status?: string
+        }
+        Update: {
+          auction_id?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "auctions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -154,11 +249,49 @@ export type Database = {
         }
         Relationships: []
       }
+      watchlist: {
+        Row: {
+          auction_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          auction_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          auction_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "watchlist_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "auctions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      admin_bid_activity: {
+        Args: never
+        Returns: {
+          auctions: number
+          bid_count: number
+          bidder_id: string
+          bidder_name: string
+          fast_bids: number
+          last_bid: string
+          total: number
+        }[]
+      }
       get_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
@@ -167,6 +300,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_active_user: { Args: { _uid: string }; Returns: boolean }
       place_bid: {
         Args: { _amount: number; _auction_id: string }
         Returns: {
