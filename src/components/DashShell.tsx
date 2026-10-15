@@ -4,7 +4,7 @@ import { LogOut, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export type NavItem = { to: string; label: string; icon: LucideIcon; exact?: boolean; badge?: number };
+export type NavItem = { to: string; label: string; icon: LucideIcon; exact?: boolean; badge?: number | undefined };
 
 export function useSignOut() {
   const navigate = useNavigate();
