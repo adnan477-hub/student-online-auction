@@ -53,7 +53,7 @@ function AdminUsers() {
             <tr key={u.id} className="border-b last:border-0">
               <td className="p-3 font-semibold">{u.full_name}{u.admin && <span className="ml-2 rounded bg-ink px-1.5 text-xs text-ink-foreground">admin</span>}</td>
               <td className="p-3">{u.email}</td><td className="p-3">{u.student_id}</td><td className="p-3">{u.college}</td><td className="p-3">{u.phone}</td><td className="p-3">{fmtDate(u.created_at)}</td>
-              <td className="p-3"><span className={`rounded-full px-2.5 py-0.5 text-xs font-bold capitalize ${badge[u.status] ?? badge.active}`}>{u.status}</span></td>
+              <td className="p-3"><span className={`rounded-full px-2.5 py-0.5 text-xs font-bold capitalize ${badge[u.status] ?? badge['active']}`}>{u.status}</span></td>
               <td className="p-3">{u.id !== user?.id && (u.status === "active"
                 ? <Button size="sm" variant="outlineInk" onClick={() => setStatus(u.id, "suspended")}>Suspend</Button>
                 : <Button size="sm" variant="paddle" onClick={() => setStatus(u.id, "active")}>Reactivate</Button>)}</td>

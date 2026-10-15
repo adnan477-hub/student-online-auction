@@ -14,7 +14,7 @@ export async function fetchMyBids(uid: string) {
   return [...map.values()];
 }
 
-export function bidStatus(a: { end_time: string; leader_id: string | null }, uid: string, now: number): BidStatus {
+export function bidStatus(a: { end_time: string; leader_id: string | null }, uid: string, now: number | null): BidStatus {
   const ended = now ? new Date(a.end_time).getTime() <= now : false;
   const lead = a.leader_id === uid;
   return ended ? (lead ? "Won" : "Lost") : lead ? "Leading" : "Outbid";
