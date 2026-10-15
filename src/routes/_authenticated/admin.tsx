@@ -20,7 +20,7 @@ function AdminLayout() {
       items={[
         { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
         { to: "/admin/users", label: "Users", icon: Users },
-        { to: "/admin/auctions", label: "Auctions", icon: Package },
+        { to: "/admin/auctions", label: "Pending approvals", icon: Package },
         { to: "/admin/bids", label: "Bidding", icon: Gavel },
         { to: "/admin/reports", label: "Reports", icon: Flag },
         { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
